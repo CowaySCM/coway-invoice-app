@@ -367,7 +367,7 @@ function crc32(buf) {
 }
 
 // ── MAIN HANDLER ─────────────────────────────────────────────
-const handler = async (req, res) => {
+module.exports = async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -413,14 +413,6 @@ const handler = async (req, res) => {
     console.error(err);
     res.status(500).json({ error: err.message });
   }
-};
-
-handler.config = {
-  api: {
-    bodyParser: {
-      sizeLimit: '50mb',
-    },
-  },
 };
 
 module.exports = handler;
