@@ -1,0 +1,6 @@
+{
+  "name": "coway-invoice-app",
+  "version": "1.0.0",
+  "description": "PDF Invoice Extractor",
+  "private": true
+}
