@@ -1,6 +1,16 @@
 // api/extract.js
 // Vercel serverless function — receives PDF(s), calls Claude, returns .xlsx
-const ANTHROPIC_API_KEY = "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";
+
+module.exports.config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '50mb',
+    },
+  },
+};
+
+const ANTHROPIC_API_KEY = "YOUR_API_KEY_HERE"; // ← paste your key here
+
 const https = require("https");
 
 // ── VENDOR RULES ─────────────────────────────────────────────
@@ -376,7 +386,6 @@ module.exports = async (req, res) => {
   try {
     const { files, merged } = req.body;
     const apiKey = ANTHROPIC_API_KEY;
-
     if (!files || !files.length) return res.status(400).json({ error: "No files provided" });
 
     // sheets keyed by vendor name
