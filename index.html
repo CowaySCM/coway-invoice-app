@@ -53,44 +53,7 @@
   h1 span { background: linear-gradient(90deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
   .subtitle { margin-top: 12px; font-size: 13px; color: var(--muted); line-height: 1.6; }
 
-  /* API Key input */
-  .api-section {
-    margin-bottom: 24px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 16px 20px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .api-section label { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
-  .api-section input {
-    flex: 1;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 3px;
-    padding: 8px 12px;
-    font-family: var(--mono);
-    font-size: 12px;
-    color: var(--text);
-    outline: none;
-  }
-  .api-section input:focus { border-color: var(--accent); }
-  .api-save-btn {
-    padding: 8px 16px;
-    background: var(--accent);
-    border: none;
-    border-radius: 3px;
-    color: #fff;
-    font-family: var(--display);
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    white-space: nowrap;
-  }
-  .api-save-btn:hover { opacity: 0.88; }
-  .api-status { font-size: 11px; color: var(--success); white-space: nowrap; }
+
 
   /* Drop zone */
   #dropzone {
@@ -206,14 +169,6 @@
     <p class="subtitle">Upload one or multiple invoice PDFs.<br>Review and edit, then download as Excel.</p>
   </header>
 
-  <!-- API Key -->
-  <div class="api-section">
-    <label>Anthropic API Key</label>
-    <input type="password" id="api-key-input" placeholder="sk-ant-..." autocomplete="off"/>
-    <button class="api-save-btn" id="api-save-btn">Save</button>
-    <span class="api-status" id="api-status" style="display:none">✓ Saved</span>
-  </div>
-
   <!-- File input -->
   <input type="file" id="file-input" accept="application/pdf" multiple/>
 
@@ -279,18 +234,6 @@
   const apiSaveBtn   = document.getElementById('api-save-btn');
   const apiStatus    = document.getElementById('api-status');
 
-  // ── API Key ──────────────────────────────────────────────
-  const savedKey = localStorage.getItem('anthropic_api_key');
-  if (savedKey) { apiInput.value = savedKey; apiStatus.style.display = 'inline'; }
-
-  apiSaveBtn.addEventListener('click', () => {
-    const key = apiInput.value.trim();
-    if (!key) return;
-    localStorage.setItem('anthropic_api_key', key);
-    apiStatus.style.display = 'inline';
-    showToast('✓ API key saved');
-  });
-
   // ── Toggle ───────────────────────────────────────────────
   mergedToggle.addEventListener('change', () => {
     toggleTrack.style.background = mergedToggle.checked ? 'var(--accent)' : 'var(--border)';
@@ -337,8 +280,6 @@
 
   // ── Extract ──────────────────────────────────────────────
   extractBtn.addEventListener('click', async () => {
-    const apiKey = localStorage.getItem('anthropic_api_key') || apiInput.value.trim();
-    if (!apiKey) { setStatus('Please save your API key first.', 'error'); return; }
     if (!files.length) return;
 
     extractBtn.disabled = true;
@@ -368,7 +309,7 @@
       const response = await fetch('/api/extract', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ files: filePayloads, merged: isMerged, apiKey })
+        body: JSON.stringify({ files: filePayloads, merged: isMerged })
       });
 
       progressBar.style.width = '90%';
