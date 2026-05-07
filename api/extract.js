@@ -1,7 +1,7 @@
 // api/extract.js
 // Vercel serverless function — receives PDF(s), calls Claude, returns .xlsx
 
-const ANTHROPIC_API_KEY = "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"; // ← paste your key here
+const ANTHROPIC_API_KEY = "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"; // ← paste your key here
 
 const https = require("https");
 
