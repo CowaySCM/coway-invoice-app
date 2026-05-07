@@ -369,6 +369,7 @@ function crc32(buf) {
 // ── MAIN HANDLER ─────────────────────────────────────────────
 module.exports = async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Content-Type", "application/json");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
@@ -376,7 +377,10 @@ module.exports = async (req, res) => {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
   try {
-    const { files, merged } = req.body;
+    if (!req.body) {
+      return res.status(400).json({ error: "Empty request body" });
+    }
+    const { files, merged } = req.body || {};
     const apiKey = ANTHROPIC_API_KEY;
     if (!files || !files.length) return res.status(400).json({ error: "No files provided" });
 
