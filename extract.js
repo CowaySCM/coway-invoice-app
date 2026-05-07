@@ -1,15 +1,7 @@
 // api/extract.js
 // Vercel serverless function — receives PDF(s), calls Claude, returns .xlsx
 
-module.exports.config = {
-  api: {
-    bodyParser: {
-      sizeLimit: '50mb',
-    },
-  },
-};
-
-const ANTHROPIC_API_KEY = "YOUR_API_KEY_HERE"; // ← paste your key here
+const ANTHROPIC_API_KEY = "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"; // ← paste your key here
 
 const https = require("https");
 
@@ -375,7 +367,7 @@ function crc32(buf) {
 }
 
 // ── MAIN HANDLER ─────────────────────────────────────────────
-module.exports = async (req, res) => {
+const handler = async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -422,3 +414,13 @@ module.exports = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+handler.config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '50mb',
+    },
+  },
+};
+
+module.exports = handler;
