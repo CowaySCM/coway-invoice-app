@@ -375,9 +375,8 @@ module.exports = async (req, res) => {
 
   try {
     const { files, merged } = req.body;
-const apiKey = ANTHROPIC_API_KEY;
+    const apiKey = ANTHROPIC_API_KEY;
 
-    if (!apiKey) return res.status(400).json({ error: "API key required" });
     if (!files || !files.length) return res.status(400).json({ error: "No files provided" });
 
     // sheets keyed by vendor name
